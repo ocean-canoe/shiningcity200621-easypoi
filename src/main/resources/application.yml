@@ -1,0 +1,27 @@
+server:
+  port: 8082
+  servlet.context-path: /easypoi
+  
+# hystrix 服务监控配置
+management:
+  endpoints:  
+    web:
+      exposure:
+        include: "*"  # 向外部以 HTTP 方式暴露所有 Endpoint，默认情况下除了 Shutdown Endpoint 之外，其他 Endpoint 都是启用的。
+      base-path: /easypoiManagement  # 自定义管理端点的前缀(保证安全)
+#  server:
+#    port: 18082  # 自定义管理端点端口
+  endpoint:
+    shutdown:
+      enabled: true   # 启用shutdown功能优雅停止服务。
+# 优雅停机发送post请求（不该端口）：http://127.0.0.1:8082/easypoi/easypoiManagement/shutdown
+# 优雅停机发送post请求（改端口）：http://127.0.0.1:18082/easypoiManagement/shutdown
+
+#mybatis:
+#  configuration:
+#    #  字段下划线转驼峰，根据版本不同，下边配置选其中一个。
+#    mapUnderscoreToCamelCase: true
+#    map-underscore-to-camel-case: true
+
+testConfig:
+  hello: shiningcity

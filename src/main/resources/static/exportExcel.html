@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script src="js/jQuery/jquery-1.11.3.min.js"></script>
+<script src="js/vconsole.min.js"></script>
+
+<script type="text/javascript">
+new VConsole();
+
+$(function () {
+})
+
+function fun1() {
+  var url = 'http://127.0.0.1:8082/easypoi/easypoi/exportExcel2007';
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', url, true);
+  xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+  xhr.responseType = "blob";  // 返回类型blob
+  // 定义请求完成的处理函数，请求前也可以增加加载框/禁用下载按钮逻辑
+  xhr.onload = function () {
+    // 请求完成
+    if (this.status === 200) {
+      // 返回200
+      var blob = this.response;
+      var reader = new FileReader();
+      reader.readAsDataURL(blob);  // 转换为base64，可以直接放入a表情href
+      reader.onload = function (e) {
+
+        // 转换完成，创建一个a标签用于下载
+        var a = document.createElement('a');
+        a.style.display = 'none';
+        a.download = 'data.xlsx';
+        a.href = e.target.result;
+        $("body").append(a);  // 修复firefox中无法触发click
+        a.click();
+        $(a).remove();
+      }
+    }
+  };
+  // 发送ajax请求
+  xhr.send("name=掌声&value=2")
+  // 下边这个不行
+  // var form = new FormData();
+  // form.append('name', '张三');
+  // form.append('value', 1);
+  // xhr.send(form);
+}
+
+function fun2() {
+  var url = 'http://dtoa.zhangwin.com/kunmingbackapi/opdataAnalysis/opdataAnalysisExport';
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', url, true);
+  xhr.setRequestHeader("Content-Type","application/json");
+  xhr.responseType = "blob";  // 返回类型blob
+  // 定义请求完成的处理函数，请求前也可以增加加载框/禁用下载按钮逻辑
+  xhr.onload = function () {
+    // 请求完成
+    if (this.status === 200) {
+      // 返回200
+      var blob = this.response;
+      var reader = new FileReader();
+      reader.readAsDataURL(blob);  // 转换为base64，可以直接放入a表情href
+      reader.onload = function (e) {
+        // 转换完成，创建一个a标签用于下载
+        var a = document.createElement('a');
+        a.style.display = 'none';
+        a.download = 'data.xlsx';
+        a.href = e.target.result;
+        $("body").append(a);  // 修复firefox中无法触发click
+        a.click();
+        $(a).remove();
+      }
+    }
+  };
+  // 发送ajax请求
+  var value = '{\n' +
+          '    "exportType": 3,\n' +
+          '    "quota": [\n' +
+          '        "首页",\n' +
+          '        "个人中心",\n' +
+          '        "游云南",\n' +
+          '        "机场购"\n' +
+          '    ],\n' +
+          '    "timeRange": [\n' +
+          '        "0",\n' +
+          '        "30"\n' +
+          '    ]\n' +
+          '}';
+  xhr.send(value);
+  //xhr.send(JSON.stringify({num1:123,num2:456}))
+}
+
+</script>
+</head>
+<body>
+测试excel
+  <br><br>
+<input type="button" value="导出1" onclick="fun1()"/>  测试本地接口
+  <br><br>
+<input type="button" value="导出2" onclick="fun2()"/>  测试dtoa接口
+</body>
+</html>
